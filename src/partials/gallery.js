@@ -69,7 +69,7 @@ function createMarkup(response) {
         const { webformatURL, largeImageURL, tags, likes, views, comments, downloads } = response[index];
   
         return ` <div class="photo-card">
-          <img src="${webformatURL}" alt="" loading="lazy" />
+          <img width="300px" height="225px"src="${webformatURL}" alt="" loading="lazy" />
           <div class="info">
             <p class="info-item">
               <b>Likes</b>

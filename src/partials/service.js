@@ -22,7 +22,7 @@ export default class GalleryService {
 
   getImages(name) {
     return axios
-      .get(`${BASE_URL}&q=${this.name}&per_page=${options.per_page}&image_type=${options.image_type}&orientation${options.orientation}&safesearch${options.safesearch}`)
+      .get(`${BASE_URL}&q=${this.name}&per_page=${options.per_page}&image_type=${options.image_type}&orientation=${options.orientation}&safesearch=${options.safesearch}`)
       .then(({ data }) => data.hits);
   }
 
