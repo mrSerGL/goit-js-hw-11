@@ -40,10 +40,6 @@ function validateInput() {
   if (regex.test(inputValue)) {
     refs.inputField.value = '';
   }
-  //   if (refs.inputField.value < 1) {
-  //     refs.galleryDiv.innerHTML = '';
-  //     return;
-  //   }
 }
 
 function getImages(event) {
@@ -51,5 +47,48 @@ function getImages(event) {
 
   galleryService.query = refs.inputField.value.trim();
 
-  galleryService.getImages().then(response => console.log(response));
+  galleryService.getImages().then(response => {
+
+    console.log(response);
+    
+
+    if (response.length < 1) {
+      refs.galleryDiv.innerHTML = '';
+      return;
+    }
+    createMarkup(response)
+
+  });
 }
+
+function createMarkup(response) {
+    refs.galleryDiv.innerHTML = '';
+  
+    const markup = response
+      .map((image, index) => {
+        const { webformatURL, largeImageURL, tags, likes, views, comments, downloads } = response[index];
+  
+        return ` <div class="photo-card">
+          <img src="${webformatURL}" alt="" loading="lazy" />
+          <div class="info">
+            <p class="info-item">
+              <b>Likes</b>
+            </p>
+            <p class="info-item">
+              <b>Views</b>
+            </p>
+            <p class="info-item">
+              <b>Comments</b>
+            </p>
+            <p class="info-item">
+              <b>Downloads</b>
+            </p>
+          </div>
+        </div>
+        `;
+      })
+      .join('');
+  
+      refs.galleryDiv.innerHTML = markup;
+
+  }
