@@ -10,19 +10,20 @@ const options ={
     image_type: 'photo',
     orientation: 'horisontal',
     safesearch: 'false',
-    per_page: 20,
+    per_page: 4,
 };
 
 export default class GalleryService {
   constructor() {
     this.name = '';
+    this.page = 1;
   }
 
 
 
   getImages(name) {
     return axios
-      .get(`${BASE_URL}&q=${this.name}&per_page=${options.per_page}&image_type=${options.image_type}&orientation=${options.orientation}&safesearch=${options.safesearch}`)
+      .get(`${BASE_URL}&q=${this.name}&page=${this.page}&per_page=${options.per_page}&image_type=${options.image_type}&orientation=${options.orientation}&safesearch=${options.safesearch}`)
       .then(({ data }) => data.hits);
   }
 
