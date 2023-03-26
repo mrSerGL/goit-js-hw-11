@@ -68,7 +68,7 @@ async function getImages(event) {
       checkReceivedData(response);
     });
   } catch (error) {
-    console.log('getImage say:',error.message);
+    console.log('getImage say:', error.message);
   }
 }
 
@@ -131,14 +131,18 @@ function infinityLoading() {
 }
 
 async function onLoadMore() {
-  //* refs.moreButton.classList.add('loading');
+  try {
+    //* refs.moreButton.classList.add('loading');
 
-  galleryService.page += 1;
+    galleryService.page += 1;
 
-  const response = await galleryService.getImages(galleryService.name);
-  firstPageOfImages = [...firstPageOfImages, ...response.hits];
+    const response = await galleryService.getImages(galleryService.name);
+    firstPageOfImages = [...firstPageOfImages, ...response.hits];
 
-  createMarkup(firstPageOfImages);
+    createMarkup(firstPageOfImages);
+  } catch (error) {
+    console.log("onLoadMore say:",error.message);
+  }
 }
 
 function onGalleryContainerClick(event) {
