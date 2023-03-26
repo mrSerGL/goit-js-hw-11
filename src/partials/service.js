@@ -1,5 +1,4 @@
 import axios from 'axios';
-// import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
 const BASE_URL =
   'https://pixabay.com/api/?key=34696430-6b2d422f51ccceb24da3a2678';
@@ -20,12 +19,6 @@ export default class GalleryService {
   }
 
   async getImages(name) {
-    // return axios
-    //   .get(
-    //     `${BASE_URL}&q=${this.name}&page=${this.page}&per_page=${options.per_page}&image_type=${options.image_type}&orientation=${options.orientation}&safesearch=${options.safesearch}`
-    //   )
-    //   .then(({ data }) => data.hits);
-
     const response = await axios.get(
       `${BASE_URL}&q=${this.name}&page=${this.page}&per_page=${options.per_page}&image_type=${options.image_type}&orientation=${options.orientation}&safesearch=${options.safesearch}`
     );

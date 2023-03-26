@@ -5,10 +5,6 @@ import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import GalleryService from './service';
 const galleryService = new GalleryService();
 
-
-
-
-
 const markup = `
 <div class="photo-card">
   <img src="" alt="" loading="lazy" />
@@ -41,7 +37,6 @@ const refs = {
 let firstPageOfImages = [];
 refs.moreButton.classList.add('hidden');
 
-
 refs.inputField.addEventListener('input', validateInput);
 refs.submitBtn.addEventListener('click', getImages);
 refs.moreButton.addEventListener('click', onLoadMore);
@@ -57,31 +52,28 @@ function validateInput() {
 }
 
 async function getImages(event) {
-  event.preventDefault();
+  try {
+    event.preventDefault();
 
-  galleryService.query = refs.inputField.value.trim();
-  galleryService.page = 1;
-  firstPageOfImages = [];
+    galleryService.query = refs.inputField.value.trim();
+    galleryService.page = 1;
+    firstPageOfImages = [];
 
-  const response = await galleryService.getImages().then(response => {
-    console.log('str 68:', response.hits);
+    const response = await galleryService.getImages().then(response => {
+      console.log('str 68:', response.hits);
 
-    // if (response.hits.length < 1) {
-    //   refs.galleryContainer.innerHTML = '';
-    //   return;
-    // }
+      firstPageOfImages = response.hits;
 
-    firstPageOfImages = response.hits;
-
-    createMarkup(response.hits);
-    checkReceivedData(response);
-    
-  });
+      createMarkup(response.hits);
+      checkReceivedData(response);
+    });
+  } catch (error) {
+    console.log('getImage say:',error.message);
+  }
 }
 
 function createMarkup(response) {
   refs.galleryContainer.innerHTML = '';
- 
 
   const markup = response
     .map((image, index) => {
@@ -122,16 +114,6 @@ function createMarkup(response) {
     .join('');
 
   refs.galleryContainer.innerHTML = markup;
- 
-
-//   const { height: cardHeight } = document
-//   .querySelector(".gallery")
-//   .firstElementChild.getBoundingClientRect();
-
-// window.scrollBy({
-//   top: cardHeight * 2,
-//   behavior: "smooth",
-// });
 }
 
 function infinityLoading() {
@@ -155,10 +137,8 @@ async function onLoadMore() {
 
   const response = await galleryService.getImages(galleryService.name);
   firstPageOfImages = [...firstPageOfImages, ...response.hits];
-  // .then(response => {firstPageOfImages = [...firstPageOfImages, ...response.hits];
 
   createMarkup(firstPageOfImages);
-  // toggleMoreButton(articles);
 }
 
 function onGalleryContainerClick(event) {
@@ -184,19 +164,15 @@ function checkReceivedData(response) {
   if (response.hits.length < 1) {
     refs.galleryContainer.innerHTML = '';
     console.dir(refs.moreButton);
-    
+
     refs.moreButton.classList.add('hidden');
     Notify.failure(
       "We're sorry, but you've reached the end of search results."
     );
-    
 
     return;
   }
 
   Notify.success(`Hooray! We found ${response.total} images.`);
   refs.moreButton.classList.remove('hidden');
-  
 }
-
-
