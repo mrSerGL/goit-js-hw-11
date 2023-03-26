@@ -1,14 +1,13 @@
-import SimpleLightbox from "simplelightbox";
-import "simplelightbox/dist/simple-lightbox.min.css";
+import SimpleLightbox from 'simplelightbox';
+import 'simplelightbox/dist/simple-lightbox.min.css';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
 import GalleryService from './service';
 const galleryService = new GalleryService();
 
-// const DEBOUNCE_DELAY = 300;
 
-// some defaults definitions
-let firstPageOfImages = [];
+
+
 
 const markup = `
 <div class="photo-card">
@@ -33,17 +32,20 @@ const markup = `
 const refs = {
   inputField: document.querySelector('input'),
   submitBtn: document.querySelector('button'),
-//   galleryDiv: document.querySelector('.gallery'),
+  //   galleryDiv: document.querySelector('.gallery'),
   moreButton: document.querySelector('.moreButton'),
   galleryContainer: document.querySelector('.gallery'),
 };
 
+// some defaults definitions
+let firstPageOfImages = [];
+refs.moreButton.classList.add('hidden');
 
 
 refs.inputField.addEventListener('input', validateInput);
 refs.submitBtn.addEventListener('click', getImages);
 refs.moreButton.addEventListener('click', onLoadMore);
-refs.galleryContainer.addEventListener("click", onGalleryContainerClick);
+refs.galleryContainer.addEventListener('click', onGalleryContainerClick);
 
 function validateInput() {
   const inputValue = refs.inputField.value;
@@ -61,8 +63,8 @@ async function getImages(event) {
   galleryService.page = 1;
   firstPageOfImages = [];
 
- const response = await galleryService.getImages().then(response => {
-    console.log("str 68:",response.hits);
+  const response = await galleryService.getImages().then(response => {
+    console.log('str 68:', response.hits);
 
     // if (response.hits.length < 1) {
     //   refs.galleryContainer.innerHTML = '';
@@ -73,11 +75,13 @@ async function getImages(event) {
 
     createMarkup(response.hits);
     checkReceivedData(response);
+    
   });
 }
 
 function createMarkup(response) {
   refs.galleryContainer.innerHTML = '';
+ 
 
   const markup = response
     .map((image, index) => {
@@ -117,10 +121,17 @@ function createMarkup(response) {
     })
     .join('');
 
-
-    
-
   refs.galleryContainer.innerHTML = markup;
+ 
+
+//   const { height: cardHeight } = document
+//   .querySelector(".gallery")
+//   .firstElementChild.getBoundingClientRect();
+
+// window.scrollBy({
+//   top: cardHeight * 2,
+//   behavior: "smooth",
+// });
 }
 
 function infinityLoading() {
@@ -137,48 +148,55 @@ function infinityLoading() {
   //* refs.moreButton.classList.add('hidden_on');
 }
 
-function onLoadMore() {
+async function onLoadMore() {
   //* refs.moreButton.classList.add('loading');
 
   galleryService.page += 1;
 
-  galleryService.getImages(galleryService.name).then(response => {
-    firstPageOfImages = [...firstPageOfImages, ...response.hits];
-    createMarkup(firstPageOfImages);
-    // toggleMoreButton(articles);
-  });
+  const response = await galleryService.getImages(galleryService.name);
+  firstPageOfImages = [...firstPageOfImages, ...response.hits];
+  // .then(response => {firstPageOfImages = [...firstPageOfImages, ...response.hits];
+
+  createMarkup(firstPageOfImages);
+  // toggleMoreButton(articles);
 }
 
 function onGalleryContainerClick(event) {
-    event.preventDefault();
-  
-    const isGallryItem = event.target.classList.contains("gallery__image");
-  
-    if (!isGallryItem) {
-      return;
-    }
-    
-    var lightbox = new SimpleLightbox(".gallery a", {
-      /* options */
-      captionsData: 'alt', captionDelay: 250, 
-  
-    });
+  event.preventDefault();
 
-    var gallery = ('.gallery a').simpleLightbox();
-    gallery.refresh(); 
+  const isGallryItem = event.target.classList.contains('gallery__image');
+
+  if (!isGallryItem) {
+    return;
+  }
+
+  var lightbox = new SimpleLightbox('.gallery a', {
+    /* options */
+    captionsData: 'alt',
+    captionDelay: 250,
+  });
+
+  var gallery = '.gallery a'.simpleLightbox();
+  gallery.refresh();
 }
 
 function checkReceivedData(response) {
-
-    if (response.hits.length < 1) {
-      refs.galleryContainer.innerHTML = '';
-      Notify.failure("We're sorry, but you've reached the end of search results.");
+  if (response.hits.length < 1) {
+    refs.galleryContainer.innerHTML = '';
+    console.dir(refs.moreButton);
     
-      return;
-    }
+    refs.moreButton.classList.add('hidden');
+    Notify.failure(
+      "We're sorry, but you've reached the end of search results."
+    );
+    
 
-    Notify.success(`Hooray! We found ${response.total} images.`);
- }
- 
- 
+    return;
+  }
+
+  Notify.success(`Hooray! We found ${response.total} images.`);
+  refs.moreButton.classList.remove('hidden');
+  
+}
+
 
