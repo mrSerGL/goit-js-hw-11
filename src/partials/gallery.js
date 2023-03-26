@@ -1,9 +1,6 @@
-// import debounce from 'debounce';
-// import normalize from 'normalize.css/normalize';
-
-
 import SimpleLightbox from "simplelightbox";
 import "simplelightbox/dist/simple-lightbox.min.css";
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
 import GalleryService from './service';
 const galleryService = new GalleryService();
@@ -57,22 +54,25 @@ function validateInput() {
   }
 }
 
-function getImages(event) {
+async function getImages(event) {
   event.preventDefault();
 
   galleryService.query = refs.inputField.value.trim();
   galleryService.page = 1;
   firstPageOfImages = [];
 
-  galleryService.getImages().then(response => {
-    console.log(response);
+ const response = await galleryService.getImages().then(response => {
+    console.log("str 68:",response.hits);
 
-    if (response.length < 1) {
-      refs.galleryContainer.innerHTML = '';
-      return;
-    }
-    firstPageOfImages = response;
-    createMarkup(response);
+    // if (response.hits.length < 1) {
+    //   refs.galleryContainer.innerHTML = '';
+    //   return;
+    // }
+
+    firstPageOfImages = response.hits;
+
+    createMarkup(response.hits);
+    checkReceivedData(response);
   });
 }
 
@@ -142,8 +142,8 @@ function onLoadMore() {
 
   galleryService.page += 1;
 
-  galleryService.getImages(galleryService.name).then(articles => {
-    firstPageOfImages = [...firstPageOfImages, ...articles];
+  galleryService.getImages(galleryService.name).then(response => {
+    firstPageOfImages = [...firstPageOfImages, ...response.hits];
     createMarkup(firstPageOfImages);
     // toggleMoreButton(articles);
   });
@@ -166,4 +166,19 @@ function onGalleryContainerClick(event) {
 
     var gallery = ('.gallery a').simpleLightbox();
     gallery.refresh(); 
-  }
+}
+
+function checkReceivedData(response) {
+
+    if (response.hits.length < 1) {
+      refs.galleryContainer.innerHTML = '';
+      Notify.failure("We're sorry, but you've reached the end of search results.");
+    
+      return;
+    }
+
+    Notify.success(`Hooray! We found ${response.total} images.`);
+ }
+ 
+ 
+

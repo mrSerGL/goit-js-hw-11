@@ -19,12 +19,19 @@ export default class GalleryService {
     this.page = 1;
   }
 
-  getImages(name) {
-    return axios
-      .get(
-        `${BASE_URL}&q=${this.name}&page=${this.page}&per_page=${options.per_page}&image_type=${options.image_type}&orientation=${options.orientation}&safesearch=${options.safesearch}`
-      )
-      .then(({ data }) => data.hits);
+  async getImages(name) {
+    // return axios
+    //   .get(
+    //     `${BASE_URL}&q=${this.name}&page=${this.page}&per_page=${options.per_page}&image_type=${options.image_type}&orientation=${options.orientation}&safesearch=${options.safesearch}`
+    //   )
+    //   .then(({ data }) => data.hits);
+
+    const response = await axios.get(
+      `${BASE_URL}&q=${this.name}&page=${this.page}&per_page=${options.per_page}&image_type=${options.image_type}&orientation=${options.orientation}&safesearch=${options.safesearch}`
+    );
+
+    const images = response.data;
+    return images;
   }
 
   get query() {
@@ -35,5 +42,3 @@ export default class GalleryService {
     this.name = newQuery;
   }
 }
-
-
