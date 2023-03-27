@@ -37,6 +37,7 @@ let firstPageOfImages = [];
 refs.moreButton.classList.add('hidden');
 
 refs.inputField.addEventListener('input', validateInput);
+refs.inputField.addEventListener('keypress', onKeyGetImages);
 refs.submitBtn.addEventListener('click', getImages);
 refs.moreButton.addEventListener('click', onLoadMore);
 refs.galleryContainer.addEventListener('click', onGalleryContainerClick);
@@ -66,7 +67,7 @@ async function getImages(event) {
       checkReceivedData(response);
     });
   } catch (error) {
-    console.log('getImage say:', error.message);
+    console.log('getImages say:', error.message);
   }
 }
 
@@ -184,3 +185,12 @@ function checkReceivedData(response) {
   Notify.success(`Hooray! We found ${response.total} images.`);
   refs.moreButton.classList.remove('hidden');
 }
+
+function onKeyGetImages(event){
+  
+  if (event.code === 'Enter' || event.code === 'NumpadEnter' ) {
+    getImages(event);
+  }
+}
+
+
