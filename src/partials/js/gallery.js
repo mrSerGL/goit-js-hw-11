@@ -115,20 +115,21 @@ function createMarkup(response) {
     .join('');
 
   refs.galleryContainer.innerHTML = markup;
+  infinityLoading();
 }
 
 function infinityLoading() {
   const observer = new IntersectionObserver(entries => {
     for (const entry of entries) {
-      console.log(entry.isIntersecting);
+      // console.log(entry.isIntersecting);
       if (entry.isIntersecting) {
         onLoadMore();
       }
     }
   }, {});
-  //* observer.observe(refs.moreButton);
+  observer.observe(refs.moreButton);
 
-  //* refs.moreButton.classList.add('hidden_on');
+ refs.moreButton.classList.add('hidden');
 }
 
 async function onLoadMore() {
@@ -141,6 +142,7 @@ async function onLoadMore() {
     firstPageOfImages = [...firstPageOfImages, ...response.hits];
 
     createMarkup(firstPageOfImages);
+    
   } catch (error) {
     console.log("onLoadMore say:",error.message);
   }
