@@ -9,7 +9,7 @@ const options = {
   image_type: 'photo',
   orientation: 'horisontal',
   safesearch: 'false',
-  per_page: 40,
+  per_page: 4,
 };
 
 export default class GalleryService {

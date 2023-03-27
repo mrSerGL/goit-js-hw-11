@@ -55,6 +55,11 @@ body {
   width: 100%;
 }
 
+.gallery__item{
+  text-decoration: none;
+  color: black;
+}
+
 .photo-card {
   //  background-color: #d6d6da;
   border-radius: 8px;
@@ -71,6 +76,10 @@ img {
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+
+
+  
 }
 
 .info-item {

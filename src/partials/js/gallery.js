@@ -28,12 +28,11 @@ const markup = `
 const refs = {
   inputField: document.querySelector('input'),
   submitBtn: document.querySelector('button'),
-  //   galleryDiv: document.querySelector('.gallery'),
   moreButton: document.querySelector('.moreButton'),
   galleryContainer: document.querySelector('.gallery'),
 };
 
-// some defaults definitions
+// some default definitions
 let firstPageOfImages = [];
 refs.moreButton.classList.add('hidden');
 
@@ -60,7 +59,6 @@ async function getImages(event) {
     firstPageOfImages = [];
 
     const response = await galleryService.getImages().then(response => {
-      console.log('str 68:', response.hits);
 
       firstPageOfImages = response.hits;
 
@@ -87,11 +85,12 @@ function createMarkup(response) {
         downloads,
       } = response[index];
 
-      return `<div class="photo-card">
- 
-        <a class="gallery__item" href="${largeImageURL}">
+      return ` <a class="gallery__item" href="${largeImageURL}">
+       <div class="photo-card">
+      
+        
             <img class="gallery__image" width="300px" height="225px" src="${webformatURL}" alt="" loading="lazy" />
-        </a>
+           
 
         <div class="info">
             <p class="info-item">
@@ -109,6 +108,7 @@ function createMarkup(response) {
         </div>
        
     </div>
+    </a>
         `;
     })
     .join('');
@@ -154,21 +154,25 @@ function onGalleryContainerClick(event) {
     return;
   }
 
-  var lightbox = new SimpleLightbox('.gallery a', {
-    /* options */
+  lightBox = new SimpleLightbox('.gallery a', {
     captionsData: 'alt',
     captionDelay: 250,
-  });
+  }).refresh();
 
-  var gallery = '.gallery a'.simpleLightbox();
-  gallery.refresh();
+  // var lightbox = new SimpleLightbox('.gallery a', {
+  //   /* options */
+  //   captionsData: 'alt',
+  //   captionDelay: 250,
+  // });
+
+  // var gallery = '.gallery a'.simpleLightbox();
+  // gallery.refresh();
 }
 
 function checkReceivedData(response) {
   if (response.hits.length < 1) {
     refs.galleryContainer.innerHTML = '';
-    console.dir(refs.moreButton);
-
+    
     refs.moreButton.classList.add('hidden');
     Notify.failure(
       "We're sorry, but you've reached the end of search results."
