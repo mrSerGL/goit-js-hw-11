@@ -115,7 +115,7 @@ function createMarkup(response) {
     .join('');
 
   refs.galleryContainer.innerHTML = markup;
-  infinityLoading();
+
 }
 
 function infinityLoading() {
@@ -142,6 +142,7 @@ async function onLoadMore() {
     firstPageOfImages = [...firstPageOfImages, ...response.hits];
 
     createMarkup(firstPageOfImages);
+    infinityLoading();
     
   } catch (error) {
     console.log("onLoadMore say:",error.message);
