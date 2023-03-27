@@ -95,16 +95,16 @@ function createMarkup(response) {
 
         <div class="info">
             <p class="info-item">
-                <span class="infoTitle"><b>Likes</b></span><span class="infoField">${likes}</span>
+                <span class="infoTitle">Likes</span><span class="infoField">${likes}</span>
             </p>
             <p class="info-item">
-                <span class="infoTitle"><b>Views</b></span><span class="infoField">${views}</span>
+                <span class="infoTitle">Views</span><span class="infoField">${views}</span>
             </p>
             <p class="info-item">
-                <span class="infoTitle"><b>Comments</b></span><span class="infoField">${comments}</span>
+                <span class="infoTitle">Comments</span><span class="infoField">${comments}</span>
             </p>
             <p class="info-item">
-                <span class="infoTitle"><b>Downloads</b></span><span class="infoField">${downloads}</span>
+                <span class="infoTitle">Downloads</span><span class="infoField">${downloads}</span>
             </p>
         </div>
        
