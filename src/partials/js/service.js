@@ -9,18 +9,19 @@ const options = {
   image_type: 'photo',
   orientation: 'horisontal',
   safesearch: 'false',
-  per_page: 20,
+  // per_page: 20,
 };
 
 export default class GalleryService {
   constructor() {
     this.name = '';
     this.page = 1;
+    this.per_page = 8;
   }
 
   async getImages(name) {
     const response = await axios.get(
-      `${BASE_URL}&q=${this.name}&page=${this.page}&per_page=${options.per_page}&image_type=${options.image_type}&orientation=${options.orientation}&safesearch=${options.safesearch}`
+      `${BASE_URL}&q=${this.name}&page=${this.page}&per_page=${this.per_page}&image_type=${options.image_type}&orientation=${options.orientation}&safesearch=${options.safesearch}`
     );
 
     const images = response.data;

@@ -62,7 +62,8 @@ async function getImages(event) {
     const response = await galleryService.getImages().then(response => {
 
       firstPageOfImages = response.hits;
-
+      // console.log(response);
+      
       createMarkup(response.hits);
       checkReceivedData(response);
     });
@@ -118,7 +119,14 @@ function createMarkup(response) {
 
 }
 
-function infinityLoading() {
+function infinityLoading(response) {
+  const showedImages = galleryService.page * galleryService.per_page;
+
+  if (showedImages >= response.total){
+    Notify.info(`We showed all ${response.total} images`);
+    return
+  }
+
   const observer = new IntersectionObserver(entries => {
     for (const entry of entries) {
       // console.log(entry.isIntersecting);
@@ -137,13 +145,14 @@ async function onLoadMore() {
     //* refs.moreButton.classList.add('loading');
 
     galleryService.page += 1;
-
+   
     const response = await galleryService.getImages(galleryService.name);
     firstPageOfImages = [...firstPageOfImages, ...response.hits];
 
     createMarkup(firstPageOfImages);
-    infinityLoading();
+    infinityLoading(response);
     
+
   } catch (error) {
     console.log("onLoadMore say:",error.message);
   }
@@ -179,7 +188,7 @@ function checkReceivedData(response) {
     
     refs.moreButton.classList.add('hidden');
     Notify.failure(
-      "We're sorry, but you've reached the end of search results."
+      "We're sorry, but not found such images.."
     );
 
     return;
@@ -197,3 +206,4 @@ function onKeyGetImages(event){
 }
 
 
+// Notify.info(`page: ${galleryService.page}, images: ${showedImages} / ${response.total}`);
