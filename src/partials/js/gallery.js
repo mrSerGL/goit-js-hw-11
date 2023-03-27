@@ -5,26 +5,6 @@ import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import GalleryService from './service';
 const galleryService = new GalleryService();
 
-const markup = `
-<div class="photo-card">
-  <img src="" alt="" loading="lazy" />
-  <div class="info">
-    <p class="info-item">
-      <b>Likes</b>
-    </p>
-    <p class="info-item">
-      <b>Views</b>
-    </p>
-    <p class="info-item">
-      <b>Comments</b>
-    </p>
-    <p class="info-item">
-      <b>Downloads</b>
-    </p>
-  </div>
-</div>
-`;
-
 const refs = {
   inputField: document.querySelector('input'),
   submitBtn: document.querySelector('button'),
@@ -60,10 +40,8 @@ async function getImages(event) {
     firstPageOfImages = [];
 
     const response = await galleryService.getImages().then(response => {
-
       firstPageOfImages = response.hits;
-      // console.log(response);
-      
+
       createMarkup(response.hits);
       checkReceivedData(response);
     });
@@ -89,11 +67,7 @@ function createMarkup(response) {
 
       return ` <a class="gallery__item" href="${largeImageURL}">
        <div class="photo-card">
-      
-        
             <img class="gallery__image" width="300px" height="225px" src="${webformatURL}" alt="" loading="lazy" />
-           
-
         <div class="info">
             <p class="info-item">
                 <span class="infoTitle">Likes</span><span class="infoField">${likes}</span>
@@ -108,7 +82,6 @@ function createMarkup(response) {
                 <span class="infoTitle">Downloads</span><span class="infoField">${downloads}</span>
             </p>
         </div>
-       
     </div>
     </a>
         `;
@@ -116,15 +89,14 @@ function createMarkup(response) {
     .join('');
 
   refs.galleryContainer.innerHTML = markup;
-
 }
 
 function infinityLoading(response) {
   const showedImages = galleryService.page * galleryService.per_page;
 
-  if (showedImages >= response.total){
+  if (showedImages >= response.total) {
     Notify.info(`We showed all ${response.total} images`);
-    return
+    return;
   }
 
   const observer = new IntersectionObserver(entries => {
@@ -137,7 +109,7 @@ function infinityLoading(response) {
   }, {});
   observer.observe(refs.moreButton);
 
- refs.moreButton.classList.add('hidden');
+  refs.moreButton.classList.add('hidden');
 }
 
 async function onLoadMore() {
@@ -145,16 +117,14 @@ async function onLoadMore() {
     //* refs.moreButton.classList.add('loading');
 
     galleryService.page += 1;
-   
+
     const response = await galleryService.getImages(galleryService.name);
     firstPageOfImages = [...firstPageOfImages, ...response.hits];
 
     createMarkup(firstPageOfImages);
     infinityLoading(response);
-    
-
   } catch (error) {
-    console.log("onLoadMore say:",error.message);
+    console.log('onLoadMore say:', error.message);
   }
 }
 
@@ -185,12 +155,9 @@ function onGalleryContainerClick(event) {
 function checkReceivedData(response) {
   if (response.hits.length < 1) {
     refs.galleryContainer.innerHTML = '';
-    
-    refs.moreButton.classList.add('hidden');
-    Notify.failure(
-      "We're sorry, but not found such images.."
-    );
 
+    refs.moreButton.classList.add('hidden');
+    Notify.failure("We're sorry, not found such image");
     return;
   }
 
@@ -198,12 +165,9 @@ function checkReceivedData(response) {
   refs.moreButton.classList.remove('hidden');
 }
 
-function onKeyGetImages(event){
-  
-  if (event.code === 'Enter' || event.code === 'NumpadEnter' ) {
+function onKeyGetImages(event) {
+  if (event.code === 'Enter' || event.code === 'NumpadEnter') {
     getImages(event);
   }
 }
 
-
-// Notify.info(`page: ${galleryService.page}, images: ${showedImages} / ${response.total}`);

@@ -16,7 +16,7 @@ export default class GalleryService {
   constructor() {
     this.name = '';
     this.page = 1;
-    this.per_page = 8;
+    this.per_page = 20;
   }
 
   async getImages(name) {
