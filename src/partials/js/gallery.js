@@ -138,7 +138,7 @@ function onGalleryContainerClick(event) {
     return;
   }
 
-  lightBox = new SimpleLightbox('.gallery a', {
+  const lightBox = new SimpleLightbox('.gallery a', {
     captionsData: 'alt',
     captionDelay: 250,
   }).refresh();
