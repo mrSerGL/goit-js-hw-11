@@ -117,10 +117,6 @@ async function onLoadMore() {
   try {
     //* refs.moreButton.classList.add('loading');
 
-    // if (galleryService.name !== refs.inputField.value.trim()){
-    //   console.log('name not the same');
-    // }
-
     galleryService.page += 1;
 
     const response = await galleryService.getImages(galleryService.name);
@@ -146,15 +142,6 @@ function onGalleryContainerClick(event) {
     captionsData: 'alt',
     captionDelay: 250,
   }).refresh();
-
-  // var lightbox = new SimpleLightbox('.gallery a', {
-  //   /* options */
-  //   captionsData: 'alt',
-  //   captionDelay: 250,
-  // });
-
-  // var gallery = '.gallery a'.simpleLightbox();
-  // gallery.refresh();
 }
 
 function checkReceivedData(response) {
