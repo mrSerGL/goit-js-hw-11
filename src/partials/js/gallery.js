@@ -34,6 +34,7 @@ function validateInput() {
 async function getImages(event) {
   try {
     event.preventDefault();
+    observer.unobserve(refs.moreButton);
 
     galleryService.query = refs.inputField.value.trim();
     galleryService.page = 1;
@@ -98,23 +99,27 @@ function infinityLoading(response) {
     Notify.info(`We showed all ${response.total} images`);
     return;
   }
-
-  const observer = new IntersectionObserver(entries => {
-    for (const entry of entries) {
-      // console.log(entry.isIntersecting);
-      if (entry.isIntersecting) {
-        onLoadMore();
-      }
-    }
-  }, {});
+  
   observer.observe(refs.moreButton);
-
   refs.moreButton.classList.add('hidden');
 }
+
+const observer = new IntersectionObserver(entries => {
+  for (const entry of entries) {
+    // console.log(entry.isIntersecting);
+    if (entry.isIntersecting) {
+      onLoadMore();
+    }
+  }
+}, {});
 
 async function onLoadMore() {
   try {
     //* refs.moreButton.classList.add('loading');
+
+    // if (galleryService.name !== refs.inputField.value.trim()){
+    //   console.log('name not the same');
+    // }
 
     galleryService.page += 1;
 
