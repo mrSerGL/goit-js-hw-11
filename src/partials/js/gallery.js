@@ -37,7 +37,8 @@ async function getImages(event) {
     event.preventDefault();
     observer.unobserve(refs.moreButton);
 
-    galleryService.query = refs.inputField.value.trim();
+    // galleryService.query = refs.inputField.value.trim();
+    galleryService.name = refs.inputField.value.trim();
     galleryService.page = 1;
     firstPageOfImages = [];
 

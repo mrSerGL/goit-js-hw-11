@@ -10,17 +10,18 @@ const searchParams = new URLSearchParams({
   image_type: 'photo',
   orientation: 'horisontal',
   safesearch: 'false',
+  per_page: 20,
 });
 
 export default class GalleryService {
   constructor() {
     this.name = '';
     this.page = 1;
-    this.per_page = 20;
+    // this.per_page = 20;
   }
 
   async getImages(name) {
-    const url = `${BASE_URL}q=${this.name}&page=${this.page}&per_page=${this.per_page}&${searchParams}`;
+    const url = `${BASE_URL}q=${this.name}&page=${this.page}&${searchParams}`;
 
     const response = await axios.get(url);
 
